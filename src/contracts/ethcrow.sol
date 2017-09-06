@@ -1,0 +1,2 @@
+contract Ethcrow {
+}
