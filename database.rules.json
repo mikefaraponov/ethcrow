@@ -1,0 +1,24 @@
+{
+  "rules": {
+    "handshake": {
+      "$uid": {
+        ".read": "auth !== null && $uid === auth.uid",
+        ".write": "auth !== null && root.child('connected').hasChild($uid)",
+        ".validate": "newData.hasChild('sender') && newData.hasChild('stage') &&
+          newData.child('sender').val() == auth.uid &&
+          ((newData.child('stage') === 'INIT') ||
+            (newData.hasChildren(['wrapedKey', 'iv']) &&
+              newData.child('stage') === 'EXCHANGE') ||
+            (newData.hasChildren(['signal']) &&
+              newData.child('stage') === 'SIGNAL'))"
+      }
+    },
+    "connected": {
+      "$uid": {
+        ".read": true,
+        ".write": "auth !== null && auth.uid === $uid",
+        ".validate": "newData.isBoolean()"
+      }
+    }
+  }
+}
