@@ -33,6 +33,7 @@
     "bluebird": "^3.5.0",
     "bulma": "^0.5.2",
     "firebase": "^4.3.1",
+    "firebase-functions": "^0.6.3",
     "font-awesome": "^4.7.0",
     "mirror-creator": "^1.1.0",
     "pako": "^1.0.5",

@@ -36,7 +36,6 @@ contract Ethcrow {
         _;
     }
 
-
     function abort()
         onlySeller
         inState(State.Created)

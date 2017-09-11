@@ -6,31 +6,22 @@ import browser from 'images/browser.svg';
 const features = [{
   src: handshake,
   title: 'Escrow',
-  body: `Leaf CI is fully customizeble.
-Via simple YAML file you can add what ever you want
-to add to successful pass the build. Also we provide support.
+  body: `Ethcrow provides escrow service for documents, files, secret texts and other types of data without third party, but using smart contracts depending on some rules
 `
 }, {
   src: ethereum,
   title: 'Ethereum',
-  body: `Leaf CI created with docker in mind.
-You can build, test and deploy your docker containers with ease
-no matter what inside the container.
+  body: `Ethcrow builded on top of Ethereum, an open-source, public, blockchain-based distributed computing platform featuring smart contract functionality
 `
 }, {
   src: browser,
   title: 'Security',
-  body: `Our service provides github build workflow.
-You push into your repo,
-we clone your repo, then platform execute tasks inside
-leaf-ci.yml file.
+  body: `It adopted using all required security technics, such as PKI infrastructure, encryption, special HTTP headers and penetration testing
 `
 }, {
   src: github,
-  title: 'Github',
-  body: `Leaf CI based on linux virtual
-containers LXC/LXD, them provides build speed and isolotaion
-from other users for successful and secure build.
+  title: 'Free*',
+  body: `Ethcrow Project source codes publicitly available to others who would like to view that code, copy it, learn from it, alter it, or share it
 `
 }];
 

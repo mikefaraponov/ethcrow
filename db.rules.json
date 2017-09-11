@@ -13,6 +13,10 @@
         ".write": "auth !== null && auth.uid === $uid",
         ".validate": "newData.isBoolean()"
       }
+    },
+    "subscribers": {
+      ".read": true,
+      ".write": true
     }
   }
 }
