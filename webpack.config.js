@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const DEVELOPMENT = 'development';
 const NODE_ENV = process.env.NODE_ENV || DEVELOPMENT;
+const IS_VM = process.env.IS_VM || 'false';
 
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyAzfhQF7-xPfl6-13iTc0G1HZ0k4wJsrdU",
@@ -27,7 +28,7 @@ module.exports = {
 	  path: path.resolve(__dirname, 'target'),
 	},
 	watch: NODE_ENV === 'development',
-	watchOptions: {
+	watchOptions: IS_VM === 'true' ? null : {
 	  aggregateTimeout: 300,
 	  poll: 1000,
 	},
@@ -78,6 +79,12 @@ module.exports = {
       	include: [/node_modules/],
 	    },
       {
+        test: /\.(jpe?g|png)$/,
+        use: {
+          loader: 'file-loader',
+        },
+      },
+      {
         test: /\.svg$/,
 	      use: {
 	      	loader: 'url-loader',
@@ -89,14 +96,12 @@ module.exports = {
 	plugins: [
 	  new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-	    'FIREBASE_CONFIG': JSON.stringify(FIREBASE_CONFIG),
+	    'process.env.FIREBASE_CONFIG': JSON.stringify(FIREBASE_CONFIG),
 	  }),
 	  new webpack.ProvidePlugin({
-	  	R: 'ramda',
 	  	React: 'react',
 	  	PropTypes: 'prop-types',
 	  	Promise: "imports-loader?this=>global!exports-loader?global.Promise!bluebird",
-      fetch: "imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch",
 	  }),
 	  new HtmlWebpackPlugin({
 	  	template: path.resolve(__dirname, 'src/resources/html/index.ejs'),

@@ -1,4 +1,7 @@
 @charset "UTF-8";
-$fa-font-path: "~font-awesome/fonts";
+@import "~scss/variables";
 @import "~bulma";
+@import "~scss/components/layout";
+@import "~scss/components/landing";
+@import "~scss/components/not-found";
 @import "~font-awesome/scss/font-awesome";

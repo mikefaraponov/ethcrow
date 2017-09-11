@@ -1,6 +1,10 @@
 import {combineReducers} from 'redux';
-import {T} from 'ramda';
+import loading from 'reducers/loading';
+import storage from 'reducers/storage';
+import profile from 'reducers/profile';
 
 export default combineReducers({
-	T,
+	loading,
+  storage,
+  profile,
 });
