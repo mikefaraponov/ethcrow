@@ -1,10 +1,8 @@
 import {combineReducers} from 'redux';
-import loading from 'reducers/loading';
-import storage from 'reducers/storage';
-import profile from 'reducers/profile';
+import session from 'reducers/session';
+import network from 'reducers/network';
 
 export default combineReducers({
-	loading,
-  storage,
-  profile,
+	network,
+  session,
 });

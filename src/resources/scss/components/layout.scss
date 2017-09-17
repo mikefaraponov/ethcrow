@@ -1,15 +1,13 @@
 #app {
-
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
-#root {
-
+#content {
+  flex: 1;
 }
 
-#header {
-
-}
-
-#footer {
-
+.box:hover {
+  box-shadow: -1px 0px 10px 5px hsla(0,0%,4%,.1), 0 0 0 1px hsla(0,0%,4%,.1);
 }

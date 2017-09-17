@@ -16,12 +16,13 @@ const features = [{
 }, {
   src: browser,
   title: 'Security',
-  body: `It adopted using all required security technics, such as PKI infrastructure, encryption, special HTTP headers and penetration testing
+  body: `It is implemented using all required security technics, such as PKI infrastructure, encryption, special HTTP headers and penetration testing
 `
 }, {
   src: github,
   title: 'Free*',
-  body: `Ethcrow Project source codes publicitly available to others who would like to view that code, copy it, learn from it, alter it, or share it
+  body: `Ethcrow Project source codes publicitly available to others who would
+like to view that code, copy it, learn from it, alter it, or share it
 `
 }];
 

@@ -1,44 +1,41 @@
 import 'scss/main.scss';
-import thunk from 'redux-thunk';
 import {createLogger} from 'redux-logger';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {createStore, applyMiddleware} from 'redux';
-import complexReducer from 'reducers';
+// import complexReducer from 'reducers';
 import App from 'containers/app';
-import NoMatch from 'components/no-match';
-import firebase from 'utils/firebase';
+import NoMatch from 'components/layout/no-match';
+// import {parseRedirectResult} from 'actions/signup';
+// import authStatus from 'middleware/auth-status';
+// import networkStatus from 'middleware/network-status';
+// import thunk from 'redux-thunk';
 
-const middlewares = [thunk];
+// const middlewares = [thunk, authStatus, networkStatus];
 
-if (process.env.NODE_ENV !== 'production') {
-  middlewares.push(createLogger());
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   middlewares.push(createLogger());
+// }
 
-const withMiddlewares = applyMiddleware(...middlewares);
+// const store = createStore(complexReducer, applyMiddleware(...middlewares));
 
-const store = createStore(complexReducer, withMiddlewares);
+// if (store.getState().loading.signUpLoading) {
+//   store.dispatch(parseRedirectResult());
+// } else {
+//   store.dispatch(onAuthStateListen());
+// }
 
-const auth = firebase.auth();
+// function onAuthStateListen() {
+//   return {type: LISTEN_ON_AUTH_STATE_CHANGE};
+// }
+//
+// <Provider store={store}>
+// </Provider>
 
-auth.getRedirectResult();
-
-auth.onAuthStateChanged((user) => {
-  store.dispatch({user});
-});
-
-const root = document.getElementById('root');
-
-const Root = () => (
-  <Provider store={store}>
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/not-found" component={NoMatch}/>
-        <Route path="/" component={App}/>
-      </Switch>
-    </BrowserRouter>
-  </Provider>
-);
-
-render(<Root/>, root);
+render(<BrowserRouter>
+  <Switch>
+    <Route exact path="/not-found" component={NoMatch}/>
+    <Route path="/" component={App}/>
+  </Switch>
+</BrowserRouter>, document.getElementById('root'));

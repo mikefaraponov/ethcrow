@@ -1,44 +1,35 @@
-import Header from 'components/header';
-import Footer from 'components/footer';
-import {Route, Switch, Redirect} from 'react-router-dom';
-import Sync from 'components/sync';
-import Landing from 'components/landing';
-import autobind from 'autobind-decorator';
+import SmartHeader from 'containers/smart-header';
+import Footer from 'components/layout/footer';
+import Sync from 'containers/sync';
+import Landing from 'containers/landing';
+import Contracts from 'containers/contracts';
+import Profile from 'containers/profile';
+import PrivateRoute from 'hocs/private-route';
+import PublicRoute from 'hocs/public-route';
 import {connect} from 'react-redux';
-import {ifAuthenticated, ifNotAuthenticated} from 'hocs/secure';
-import {auth} from 'actions';
+import {Switch, Redirect} from 'react-router-dom';
 
-@connect((props) => ({
-  isAuthenticated: props.profile.auth,
-}), {
-  onSignUp: auth.signUp,
-  onSignOut: auth.signOut,
-})
-@autobind
+// @connect((props) => ({
+//   auth: !!props.session.currentUser,
+//   isSync: props.blockchain.sync,
+// }))
 export default class App extends React.Component {
-  @ifAuthenticated('/dashboard')
-  renderLanding() {
-      return <Landing onSignUp={this.props.onSignUp}/>;
-  }
-  @ifNotAuthenticated('/')
-  renderSync() {
-    return <Sync/>;
-  }
-  @ifNotAuthenticated('/')
-  renderDashboard() {
-    return null;
-  }
-  render() {
+  renderApp(auth=true) {
     return <div id="app">
-      <Header onSignUp={this.props.onSignUp}/>
-      <Switch>
-        <Route exact path="/" render={this.renderLanding}/>
-        <Route exact path="/sync" render={this.renderSync}/>
-        <Route exact path="/dashboard" render={this.renderDashboard}/>
-        <Redirect to='/not-found'/>
-      </Switch>
+      <SmartHeader/>
+      <main id="content">
+        <Switch>
+          <PublicRoute exact path="/" component={Landing} auth={auth}/>
+          <PrivateRoute path="/contracts" component={Contracts} auth={auth}/>
+          <PrivateRoute exact path="/profile" component={Profile} auth={auth}/>
+          <Redirect to="/not-found"/>
+        </Switch>
+      </main>
       <Footer/>
     </div>;
   }
+  render() {
+    const {auth, isSync} = this.props;
+    return isSync ? <Sync/> : this.renderApp(auth);
+  }
 }
-

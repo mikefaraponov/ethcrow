@@ -3,77 +3,77 @@ const AES = 'AES-CBC';
 const RSA = 'RSA-OAEP';
 
 export function generateAesKey() {
-	const options = {
-	    name: AES,
-	    length: 256,
-	};
-	return subtle.generateKey(options, true, [
-		'encrypt',
-		'decrypt',
-		'wrapKey',
-		'unwrapKey',
-	]);
+  const options = {
+      name: AES,
+      length: 256,
+  };
+  return subtle.generateKey(options, true, [
+    'encrypt',
+    'decrypt',
+    'wrapKey',
+    'unwrapKey',
+  ]);
 }
 
 export function generateRsaKey() {
-	const options = {
-	    name: RSA,
-	    modulusLength: 2048,
-	    publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-	    hash: {
-	    	name: 'SHA-512',
-	    },
-	};
-	return subtle.generateKey(options, true, [
-		'encrypt',
-		'decrypt',
-		'wrapKey',
-		'unwrapKey',
-	]);
+  const options = {
+      name: RSA,
+      modulusLength: 2048,
+      publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+      hash: {
+        name: 'SHA-512',
+      },
+  };
+  return subtle.generateKey(options, true, [
+    'encrypt',
+    'decrypt',
+    'wrapKey',
+    'unwrapKey',
+  ]);
 }
 
 export function importAesKey(jwkKey) {
-	const options = {
+  const options = {
       name: AES,
   };
-	return subtle.importKey('jwk', jwkKey, options, true, [
-		'encrypt',
-		'decrypt',
-		'wrapKey',
-		'unwrapKey',
-	]);
+  return subtle.importKey('jwk', jwkKey, options, true, [
+    'encrypt',
+    'decrypt',
+    'wrapKey',
+    'unwrapKey',
+  ]);
 }
 
 export function importRsaKey(jwkKey) {
-	const options = {
+  const options = {
       name: RSA,
       hash: {
-      	name: "SHA-512"
+        name: "SHA-512"
       },
   };
-	return subtle.importKey("jwk", jwkKey, options, true, ["decrypt"]);
+  return subtle.importKey("jwk", jwkKey, options, true, ["decrypt"]);
 }
 
 export function exportKey(key) {
-	return subtle.exportKey("jwk", key);
+  return subtle.exportKey("jwk", key);
 }
 
 export function wrapKey(key, publicKey) {
-	const options = {
+  const options = {
       name: RSA,
       hash: {name: "SHA-256"},
   };
-	return subtle.wrapKey("raw", key, publicKey, options);
+  return subtle.wrapKey("raw", key, publicKey, options);
 }
 
 export function unwrapKey(wrapped, privateKey) {
-	const wrap = {
+  const wrap = {
       name: RSA,
       modulusLength: 2048,
       publicExponent: new Uint8Array([
-      	0x01,
-      	0x00,
-      	0x01,
+        0x01,
+        0x00,
+        0x01,
       ]),
       hash: {name: "SHA-512"},
   };
@@ -81,25 +81,24 @@ export function unwrapKey(wrapped, privateKey) {
       name: "AES-CBC",
       length: 256
   };
-	return subtle.unwrapKey("raw", wrapped, privateKey, wrap, unwrap, false, [
-		"encrypt",
-		"decrypt",
-	]);
+  return subtle.unwrapKey("raw", wrapped, privateKey, wrap, unwrap, false, [
+    "encrypt",
+    "decrypt",
+  ]);
 }
 
 export function encryptAes(key, iv) {
-	const options = {
-		name: AES,
-		iv,
-	};
-	return subtle.encrypt(options, key, result);
+  const options = {
+    name: AES,
+    iv,
+  };
+  return subtle.encrypt(options, key, result);
 }
 
-export function decryptAes(iv, key, data) => {
-		const options = {
-			name: AES,
-			iv,
-		};
-		return subtle.decrypt(options, key, data);
-	}
-};
+export function decryptAes(iv, key, data) {
+  const options = {
+    name: AES,
+    iv,
+  };
+  return subtle.decrypt(options, key, data);
+}
