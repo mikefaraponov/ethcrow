@@ -1,11 +1,11 @@
 import roadmap from 'images/map.svg';
 
-const noPaddingTop = {paddingTop: 0};
-
 export default function Roadmap() {
-  return <section className="section" style={noPaddingTop}>
+  return <section className="section" style={{paddingTop: 0}}>
     <div className="container">
-      <h1 className="title is-2 ethcrow-subtitle is-spaced has-text-centered">Roadmap</h1>
+      <h1 className="title is-2 ethcrow-subtitle is-spaced has-text-centered">
+        Roadmap
+      </h1>
       <div className="columns is-centered is-multiline">
         <div className="column is-half has-text-right is-hidden-mobile">
           <img
@@ -15,28 +15,21 @@ export default function Roadmap() {
             style={{marginRight: '20px'}}/>
         </div>
         <div className="column is-half">
-           <div className="column is-12 content ">
-            <h1 className="title is-12 ethcrow-title">
-              <span className="icon is-large">
-                  <i className="fa fa-flag-checkered"></i>
-              </span>&nbsp;Production
-            </h1>
-          </div>
-          <div className="column is-12 content ">
-            <h1 className="title is-12 ethcrow-title">
-              <span className="icon is-large">
-                  <i className="fa fa-flag-checkered"></i>
-              </span>&nbsp;Feedback</h1>
-          </div>
-          <div className="column is-12 content">
-            <h1 className="title is-12 ethcrow-title">
-              <span className="icon is-large">
-                  <i className="fa fa-flag-checkered"></i>
-              </span>&nbsp;Improvements
-            </h1>
-          </div>
+          <Step title="Feedback"/>
+          <Step title="Production"/>
+          <Step title="Improvements"/>
         </div>
       </div>
     </div>
   </section>;
+}
+
+function Step({title}) {
+  return <div className="column is-12 content">
+    <h1 className="title is-12 ethcrow-title">
+      <span className="icon is-large">
+          <i className="fa fa-flag-checkered"/>
+      </span>&nbsp;{title}
+    </h1>
+  </div>
 }

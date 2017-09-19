@@ -14,8 +14,3 @@
 //   subscribers.push({email});
 // });
 
-// exports.sendWelcomeEmail = functions.auth.user().onCreate((event) => {
-// });
-
-// exports.sendUnlinkEmail = functions.auth.user().onDelete((event) => {
-// });
