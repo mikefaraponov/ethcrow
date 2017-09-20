@@ -2,6 +2,8 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "dependencies": {
+    "cors": "^2.8.4",
+    "email-validator": "^1.1.1",
     "firebase-admin": "^5.2.1",
     "firebase-functions": "^0.6.2",
     "nodemailer": "^4.1.0"

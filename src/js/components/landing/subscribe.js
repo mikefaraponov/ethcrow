@@ -1,5 +1,32 @@
+import {observer, inject} from 'mobx-react';
+import classnames from 'classnames';
+
+@observer
+class Status extends React.Component {
+  displayNone = {
+    display: 'none',
+  };
+  render() {
+    return <div>
+      <div className="notification is-danger response"
+        style={!this.props.error && this.displayNone || null}>
+        {this.props.error.text || 'Something went wrong :('}
+      </div>
+      <div className="notification is-success response"
+        style={!this.props.result && this.displayNone || null}>
+        Thanks for your attention :)
+      </div>
+    </div>
+  }
+}
+
+@inject('newsletter')
+@observer
 export default class Subscribe extends React.Component {
   render() {
+    const subscribeButton = classnames('button is-white is-outlined', {
+      'is-loading': this.props.newsletter.pending,
+    });
     return <section className="hero is-info">
       <div className="hero-body">
         <div className="container">
@@ -12,22 +39,32 @@ export default class Subscribe extends React.Component {
               <div className="field is-grouped">
                 <div className="control has-icons-left is-expanded">
                   <input
+                    onChange={this.props.newsletter.onEmailInput}
                     type="email"
                     className="input is-flat required email"
-                    placeholder="Email address" required
+                    placeholder="Email address"
+                    required
+                    disabled={this.props.newsletter.result}
                   />
                   <span className="icon is-small is-left">
                     <i className="fa fa-envelope"/>
                   </span>
                 </div>
                 <div className="control">
-                  <input
+                  <a
+                    onClick={this.props.newsletter.subscribe}
                     type="button"
-                    value="Subscribe"
-                    className="button is-white is-outlined"
-                  />
+                    className={subscribeButton}
+                    disabled={this.props.newsletter.result}
+                  >
+                    Subscribe
+                  </a>
                 </div>
               </div>
+              <Status
+                result={this.props.newsletter.result}
+                error={this.props.newsletter.error}
+              />
             </div>
           </div>
         </div>
@@ -35,4 +72,5 @@ export default class Subscribe extends React.Component {
     </section>;
   }
 }
+
 

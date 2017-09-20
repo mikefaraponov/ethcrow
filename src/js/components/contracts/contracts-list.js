@@ -1,16 +1,18 @@
 import ContractItem from 'components/contracts/contract-item';
 import {Link} from 'react-router-dom';
+// import {observer} from 'mobx-react';
 
-@observer(['contracts'])
+// @observer(['contracts'])
 export default class ContractsList extends React.Component {
   componentWillMount() {
-    this.props.contracts.fetch();
-    this.contractAdded = this.props.contracts.onContractAdded();
+    // this.props.contracts.fetch();
+    // this.contractAdded = this.props.contracts.onContractAdded();
   }
   componentWillUnmount() {
-    this.contractAdded.removeAllListeners();
+    // this.contractAdded.removeAllListeners();
   }
   render() {
+    const contracts = [];
     return <section className="section">
       <div className="container">
         <div className="columns is-centered">

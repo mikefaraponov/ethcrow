@@ -1,11 +1,13 @@
 export default class ContractsStore {
   @observable contracts = [];
+  @observable loading = false;
+  toValues = (event) => event.returnValues;
+  constructor(accounts, ethcrow) {
+    this.accounts = accounts;
+    this.ethcrow = ethcrow;
+  }
   @computed get contract() {
     return contracts;
-  }
-  @observable loading = false;
-  constructor(accounts) {
-    this.accounts = accounts;
   }
   @action
   fetch(address) {
@@ -14,7 +16,7 @@ export default class ContractsStore {
       producer: this.accounts,
       consumer: this.accounts,
     };
-    ethcrow.getPastEvents('ContractAdded', {
+    this.ethcrow.getPastEvents('ContractAdded', {
         filter: address ? Object.assign(fromOrTo, {
           address: address,
         }) : fromOrTo
@@ -23,18 +25,24 @@ export default class ContractsStore {
       .map(Contract.of)
       .then(this.fetched);
   }
+  @action
   fetchFromBlockchain = ({returnValues}) => {
         const {producer, consumer, address} = returnValues;
         const smCont = createContract(address);
         const price = eth.getBalance(address);
         const status = smCont.status.call();
         const pkey = smCont.pkey.call();
-        const files = smCont.getPastEvents('FileAdded')
-          .map((o) => o.returnValues);
-        return Promise.hash({price,
-          status, pkey, files, smCont, producer,
+        const files = smCont.getPastEvents('FileAdded').map(this.toValues);
+        const toMe = this.accounts.includes(producer);
+        return Promise.hash({
+          price,
+          status,
+          pkey,
+          files,
+          smCont,
+          producer,
           consumer,
-          toMe: this.accounts.includes(producer),
+          toMe,
         });
       }
   }
@@ -43,11 +51,18 @@ export default class ContractsStore {
     this.contracts = contracts;
     this.loading = false;
   }
+  @action
   onContractAdded() {
-    return ethcrow.events.ContractAdded().on('data', (event) => {
-      this.fetchFromBlockchain(event)
-        .then(Contract.of)
-        .then((contract) => this.contracts.push(contract));
-    });
+    return this.ethcrow.events.ContractAdded().on('data', this.listen);
   }
+  @action
+  listen = (event) => {
+    this.fetchFromBlockchain(event)
+      .then(Contract.of)
+      .then(this.setContracts);
+  };
+  @action
+  setContracts = (contract) => {
+    this.contracts.push(contract);
+  };
 }

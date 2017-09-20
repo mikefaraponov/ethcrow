@@ -2,16 +2,17 @@ import newItem from 'images/new.svg';
 import xButton from 'images/x-button.svg';
 import checked from 'images/check.svg';
 import file from 'images/file.svg';
+// import {observer} from 'mobx-react';
 
-@observer
+// @observer
 export default class ContractItem extends React.Component {
   componentWillMount() {
-    this.fileAdded = this.props.contract.onFileAdded();
-    this.statusChanged = this.props.contract.onStatusChanged();
+    // this.fileAdded = this.props.contract.onFileAdded();
+    // this.statusChanged = this.props.contract.onStatusChanged();
   }
   componentWillUnmount() {
-    this.fileAdded.removeAllListeners();
-    this.statusChanged.removeAllListeners();
+    // this.fileAdded.removeAllListeners();
+    // this.statusChanged.removeAllListeners();
   }
   render() {
     return <div className="box">
@@ -19,7 +20,7 @@ export default class ContractItem extends React.Component {
         <div className="media-left">
           <figure className="image is-64x64">
             <img
-              src={getImageByStatus(status)}
+              src={getImageByStatus('NEW')}
               alt="Status"/>
           </figure>
         </div>

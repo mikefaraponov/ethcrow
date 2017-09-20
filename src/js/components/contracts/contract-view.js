@@ -1,16 +1,17 @@
 import {withRouter} from 'react-router-dom';
+// import {observer} from 'mobx-react';
 
 @withRouter
-@observer(['ethcrow'])
+// @observer(['ethcrow'])
 export default class ContractView extends React.Component {
   componentWillMount() {
-    this.props.contract.fetch(this.props.match.params.address);
-    this.fileAdded = this.props.contract.onFileAdded();
-    this.statusChanged = this.props.contract.onStatusChanged();
+    // this.props.contract.fetch(this.props.match.params.address);
+    // this.fileAdded = this.props.contract.onFileAdded();
+    // this.statusChanged = this.props.contract.onStatusChanged();
   }
   componentWillUnmount() {
-    this.fileAdded.removeAllListeners();
-    this.statusChanged.removeAllListeners();
+    // this.fileAdded.removeAllListeners();
+    // this.statusChanged.removeAllListeners();
   }
   render() {
     return <section className="section">

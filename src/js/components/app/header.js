@@ -1,16 +1,16 @@
 import {NavLink} from 'react-router-dom';
 import box from 'images/box.svg';
+// import {observer} from 'mobx-react';
 
-@observer(['counter'])
+// @observer(['counter'])
 export default class Header extends React.Component {
   componentWillMount() {
-    this.contractAdded = this.props.counter.onContractAdded();
+    // this.contractAdded = this.props.counter.onContractAdded();
   }
   componentWillUnmount() {
-    this.contractAdded.removeAllListeners();
+    // this.contractAdded.removeAllListeners();
   }
   render() {
-    const {newContracts=0} = this.props;
     return <nav className="nav">
       <div className="container">
         <div className="nav-left">

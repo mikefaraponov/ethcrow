@@ -9,16 +9,8 @@ const IS_NOT_DEV = NODE_ENV !== DEV;
 const IS_DEV = NODE_ENV === DEV;
 const IS_PROD = NODE_ENV === 'production';
 const IS_VM = process.env.IS_VM || 'false';
-
-const FIREBASE_CONFIG = {
-  apiKey: 'AIzaSyAzfhQF7-xPfl6-13iTc0G1HZ0k4wJsrdU',
-  authDomain: 'hackathon-ethcrow.firebaseapp.com',
-  databaseURL: 'https://hackathon-ethcrow.firebaseio.com',
-  projectId: 'hackathon-ethcrow',
-  storageBucket: 'hackathon-ethcrow.appspot.com',
-  messagingSenderId: '148747448186',
-};
-
+const RPC_URL = 'https://' +
+  'us-central1-hackathon-ethcrow.cloudfunctions.net/subscribe';
 const extractSass = new ExtractTextPlugin({
   filename: '[name].[contenthash].css',
   disable: IS_DEV,
@@ -110,7 +102,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-      'process.env.FIREBASE_CONFIG': JSON.stringify(FIREBASE_CONFIG),
+      'process.env.RPC_URL': JSON.stringify(RPC_URL),
     }),
     new webpack.ProvidePlugin({
       React: 'react',

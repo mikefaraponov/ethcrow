@@ -12,10 +12,12 @@ export default class Counter {
   onContractAdded() {
     return ethcrow.events.ContractAdded().on('data', (event) => {
       this.counter += 1;
+      localStorage.counter = JSON.stringify(this.counter);
     });
   }
   @action
   reset() {
     this.counter = 0;
+    localStorage.counter = JSON.stringify(0);
   }
 }

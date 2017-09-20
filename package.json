@@ -6,7 +6,7 @@
   "scripts": {
     "start": "firebase serve --port $PORT",
     "build": "npm run clean && NODE_ENV=production webpack",
-    "watch": "npm run clean && webpack",
+    "watch": "webpack",
     "clean": "rm -rf target",
     "dev": "npm run serve && npm run watch",
     "serve": "firebase serve 1>&/dev/null &",
@@ -34,6 +34,7 @@
     "bluebird": "^3.5.0",
     "bulma": "^0.5.2",
     "classnames": "^2.2.5",
+    "email-validator": "^1.1.1",
     "font-awesome": "^4.7.0",
     "ipfs": "^0.26.0",
     "mirror-creator": "^1.1.0",

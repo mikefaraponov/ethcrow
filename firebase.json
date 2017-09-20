@@ -1,7 +1,4 @@
 {
-  "database": {
-    "rules": "rules.json"
-  },
   "hosting": {
     "public": "target",
     "rewrites": [
