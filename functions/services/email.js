@@ -3,7 +3,7 @@
  * @param  {[type]} mailTransport [description]
  * @return {[type]}               [description]
  */
-function createEmails(mailTransport) {
+function createEmailService(mailTransport) {
   return {
     sendWelcomeEmail(email, token) {
       const opts = {
@@ -17,4 +17,4 @@ function createEmails(mailTransport) {
   };
 }
 
-module.exports = createEmails;
+module.exports = createEmailService;
