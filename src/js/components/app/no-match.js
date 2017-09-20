@@ -1,20 +1,25 @@
 import notFound from 'images/not-found.svg';
-import {Link} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
-export default function NoMatch() {
-  return <section className="hero is-fullheight">
-    <div className="hero-body">
-      <div className="container has-text-centered">
-        <img className="image is-inline" src={notFound}/>
-        <p>
-          <Link className="button is-info is-outlined" to="/">
-            <span className="icon">
-              <i className="fa fa-arrow-left"/>
-            </span>
-            <span>Back to Home</span>
-          </Link>
-        </p>
+@withRouter
+export default class NoMatch extends React.Component {
+  goBack = () => this.props.history.goBack();
+  render() {
+    return <section className="hero is-fullheight">
+      <div className="hero-body">
+        <div className="container has-text-centered">
+          <img className="image is-inline" src={notFound}/>
+          <p>
+            <a onClick={this.goBack}
+              className="button is-info is-outlined">
+              <span className="icon">
+                <i className="fa fa-arrow-left"/>
+              </span>
+              <span>Go Back</span>
+            </a>
+          </p>
+        </div>
       </div>
-    </div>
-  </section>;
+    </section>;
+  }
 }
