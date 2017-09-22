@@ -33,7 +33,10 @@ export default class Header extends React.Component {
             About
           </NavItem>
           <NavItem to="/contracts">
-            Contracts<Counter counter={0}/>
+            App<Counter counter={0}/>
+          </NavItem>
+          <NavItem to="/keys">
+            Keys
           </NavItem>
         </div>
       </div>

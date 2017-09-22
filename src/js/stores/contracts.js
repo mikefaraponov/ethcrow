@@ -1,3 +1,5 @@
+import {observable, computed, action} from 'mobx';
+
 export default class ContractsStore {
   @observable contracts = [];
   @observable loading = false;
@@ -12,14 +14,11 @@ export default class ContractsStore {
   @action
   fetch(address) {
     this.loading = true;
-    const fromOrTo = {
-      producer: this.accounts,
-      consumer: this.accounts,
-    };
     this.ethcrow.getPastEvents('ContractAdded', {
-        filter: address ? Object.assign(fromOrTo, {
-          address: address,
-        }) : fromOrTo
+        filter:  Object.assign({
+          producer: this.accounts,
+          consumer: this.accounts,
+        }, address ? {address} : void 0);
       })
       .map(this.fetchFromBlockchain)
       .map(Contract.of)

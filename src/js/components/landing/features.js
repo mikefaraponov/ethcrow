@@ -3,18 +3,18 @@ import featuresList from 'components/landing/features-list';
 function toFeature(feature) {
   return <div
     key={feature.id}
-    className="content column is-12-mobile is-3-desktop is-6-tablet">
+    className="content feature column is-12-mobile is-3-desktop is-6-tablet">
     <img
-      className="image is-inline is-150x150"
       src={feature.src}
+      className="feature-image image is-150x150"
       alt={feature.title}
     />
     <h1 className="title has-text-centered ethcrow-title">
       {feature.title}
     </h1>
-    <blockquote className="has-text-left">
-      {feature.body}
-    </blockquote>
+      <blockquote className="feature-text has-text-left">
+        {feature.body}
+      </blockquote>
   </div>;
 }
 

@@ -2,10 +2,16 @@ import newItem from 'images/new.svg';
 import xButton from 'images/x-button.svg';
 import checked from 'images/check.svg';
 import file from 'images/file.svg';
-// import {observer} from 'mobx-react';
+import {observer} from 'mobx-react';
 
-// @observer
+@observer
 export default class ContractItem extends React.Component {
+  static toContract(contract) {
+    return <ContractItem
+      contract={contract}
+      key={contract.id}
+    />;
+  }
   componentWillMount() {
     // this.fileAdded = this.props.contract.onFileAdded();
     // this.statusChanged = this.props.contract.onStatusChanged();
@@ -18,18 +24,20 @@ export default class ContractItem extends React.Component {
     return <div className="box">
       <article className="media">
         <div className="media-left">
-          <figure className="image is-64x64">
+          <figure className="image is-96x96">
             <img
-              src={getImageByStatus('NEW')}
+              src={getImageByStatus(this.props.contract.status)}
               alt="Status"/>
           </figure>
         </div>
         <div className="media-right">
           <div className="content">
             <p>
-              From <strong title="">{from}</strong>
+              Address <strong>{this.props.contract.from}</strong>
               <br/>
-              To <strong title="">{to}</strong>
+              From <strong>{this.props.contract.from}</strong>
+              <br/>
+              To <strong>{this.props.contract.to}</strong>
               <br/>
               Price <strong>0.05 ETH</strong>
             </p>

@@ -11,7 +11,7 @@ const provider = (typeof _web3 !== 'undefined' &&
   (_web3.currentProvider || _web3.givenProvider)) ||
   (typeof Web3 !== 'undefined' && Web3.givenProvider) ||
   (typeof ethereumProvider !== 'undefined' && ethereumProvider) ||
-  'ws://localhost:8546';
+  'http://localhost:8545';
 
 export const accounts = _web3.eth.accounts;
 

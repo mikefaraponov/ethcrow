@@ -1,3 +1,4 @@
+import {observable, action} from 'mobx';
 
 export default class IPFS {
   @observable isReady = false;

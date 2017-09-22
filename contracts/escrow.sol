@@ -1,7 +1,9 @@
+pragma solidity ^0.4.4;
+
 contract Escrow {
     enum Status { Created, Accepted, Rejected }
     event FileAdded(bytes32 path, bytes32 wkey, bytes32 iv);
-    event PublicKeyChanged(bytes32 _pkey)
+    event PublicKeyChanged(bytes32 _pkey);
     event StatusChanged(Status status);
     address public consumer;
     address public producer;
@@ -38,19 +40,3 @@ contract Escrow {
         FileAdded(path, wkey, iv);
     }
 }
-
-contract Ethcrow {
-    address public creator;
-    event ContractCreated(address indexed producer, address indexed consumer, address escrow);
-    function Ethcrow() {
-        creator = msg.sender;
-    }
-    function createContract(address producer, bytes32 pkey)
-        payable
-    {
-        Escrow escrow = (new Escrow).value(msg.value)(producer,
-            msg.sender, pkey);
-        ContractCreated(producer, consumer, escrow);
-    }
-}
-

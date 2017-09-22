@@ -1,6 +1,3 @@
-import ifElse from 'ramda/src/ifElse';
-import is from 'ramda/src/is';
-import prop from 'ramda/src/prop';
 import {observable, computed, action} from 'mobx';
 import {validate} from 'email-validator';
 
@@ -14,6 +11,7 @@ export default class Newsletter {
   }
   @action
   onEmailInput = (e) => {
+    this.error = false;
     this.email = e.target.value;
   }
   @action

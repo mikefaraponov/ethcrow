@@ -8,17 +8,22 @@ export default class Network {
   @computed get isOffline() {
     return !online;
   }
-  @action.bound
-  onOnline() {
+  @action
+  onOnline = () => {
     this.online = true;
   }
-  @action.bound
-  onOffline() {
+  @action
+  onOffline = () => {
     this.online = false;
   }
-  init() {
-    window.addEventListener('online', this.onOnline);
-    window.addEventListener('offline', this.onOffline);
-    return this;
+  @action
+  initialize = () => {
+    window.addEventListener('online', this.onOnline, false);
+    window.addEventListener('offline', this.onOffline, false);
+  }
+  @action
+  deinitialize = () => {
+    window.removeEventListener('online', this.onOnline);
+    window.removeEventListener('offline', this.onOffline);
   }
 }

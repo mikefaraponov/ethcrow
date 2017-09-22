@@ -1,6 +1,6 @@
-// import {observer} from 'mobx-react';
+import {observer} from 'mobx-react';
 
-// @observer
+@observer
 export default class CreateContract extends React.Component {
   render() {
     return <section className="section">

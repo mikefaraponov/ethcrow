@@ -1,8 +1,8 @@
 import {withRouter} from 'react-router-dom';
-// import {observer} from 'mobx-react';
+import {observer, inject} from 'mobx-react';
 
 @withRouter
-// @observer(['ethcrow'])
+@observer
 export default class ContractView extends React.Component {
   componentWillMount() {
     // this.props.contract.fetch(this.props.match.params.address);

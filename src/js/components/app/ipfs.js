@@ -1,9 +1,9 @@
-// import {observer} from 'mobx-react';
+import {inject} from 'mobx-react';
 
-// @observer(['ipfs'])
+@inject('ipfs')
 export default class Ipfs extends React.Component {
   componentWillMount() {
-    // this.props.ipfs.initialize();
+    return this.props.ipfs.initialize();
   }
   render() {
     return React.Children.only(this.props.children);

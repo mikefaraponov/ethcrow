@@ -1,7 +1,7 @@
 import roadmap from 'images/map.svg';
 
 export default function Roadmap() {
-  return <section className="section" style={{paddingTop: 0}}>
+  return <section className="section">
     <div className="container">
       <h1 className="title is-2 ethcrow-subtitle is-spaced has-text-centered">
         Roadmap

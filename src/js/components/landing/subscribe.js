@@ -1,24 +1,6 @@
 import {observer, inject} from 'mobx-react';
 import classnames from 'classnames';
-
-@observer
-class Status extends React.Component {
-  displayNone = {
-    display: 'none',
-  };
-  render() {
-    return <div>
-      <div className="notification is-danger response"
-        style={!this.props.error && this.displayNone || null}>
-        {this.props.error.text || 'Something went wrong :('}
-      </div>
-      <div className="notification is-success response"
-        style={!this.props.result && this.displayNone || null}>
-        Thanks for your attention :)
-      </div>
-    </div>
-  }
-}
+import Status from 'components/landing/status';
 
 @inject('newsletter')
 @observer
@@ -51,14 +33,9 @@ export default class Subscribe extends React.Component {
                   </span>
                 </div>
                 <div className="control">
-                  <a
-                    onClick={this.props.newsletter.subscribe}
-                    type="button"
-                    className={subscribeButton}
+                  <a className={subscribeButton}
                     disabled={this.props.newsletter.result}
-                  >
-                    Subscribe
-                  </a>
+                    onClick={this.props.newsletter.subscribe}>Subscribe</a>
                 </div>
               </div>
               <Status
@@ -72,5 +49,3 @@ export default class Subscribe extends React.Component {
     </section>;
   }
 }
-
-

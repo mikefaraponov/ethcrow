@@ -7,7 +7,6 @@ const DEV = 'development';
 const NODE_ENV = process.env.NODE_ENV || DEV;
 const IS_NOT_DEV = NODE_ENV !== DEV;
 const IS_DEV = NODE_ENV === DEV;
-const IS_PROD = NODE_ENV === 'production';
 const IS_VM = process.env.IS_VM || 'false';
 const RPC_URL = 'https://' +
   'us-central1-hackathon-ethcrow.cloudfunctions.net/subscribe';
@@ -25,7 +24,7 @@ module.exports = {
   },
   watch: IS_DEV,
   devtool: IS_DEV ? 'cheap-inline-module-source-map' : false,
-  watchOptions: IS_VM === 'true' ? null : {
+  watchOptions: IS_VM === 'true' ? false : {
     aggregateTimeout: 300,
     poll: 1000,
   },
@@ -79,7 +78,7 @@ module.exports = {
       {
         test: /\.(jpe?g|png)$/,
         use: [{
-          loader: 'file-loader',
+          loader: 'url-loader',
         },{
           loader: 'img-loader?enabled=' + IS_NOT_DEV,
         }],
@@ -102,7 +101,6 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       React: 'react',
-      PropTypes: 'prop-types',
       Promise: 'bluebird',
       'window.Promise': 'bluebird',
     }),
