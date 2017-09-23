@@ -3,6 +3,6 @@ var Escrow = artifacts.require("./Escrow.sol");
 
 module.exports = function(deployer) {
   deployer.deploy(Escrow);
-  deployer.link(Escrow, Ethcrow);
+  deployer.autolink();
   deployer.deploy(Ethcrow);
 };

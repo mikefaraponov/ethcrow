@@ -6,4 +6,9 @@ module.exports = {
       network_id: "*",
     },
   },
+  rpc: {
+    host: 'localhost',
+    port: 8545,
+  },
+  migrations_directory: './migrations'
 };

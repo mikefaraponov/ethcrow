@@ -31,6 +31,13 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.sol$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'truffle-solidity',
+        }
+      },
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
