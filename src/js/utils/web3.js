@@ -1,26 +1,29 @@
 import Web3Driver from 'web3';
+import EthcrowArtifact from 'build/contracts/Ethcrow.json';
+import EscrowArtifact from 'build/contracts/Escrow.json';
+import TruffleContract from 'truffle-contract';
 
-const ETH_ABI = process.env.ETH_ABI;
-const ETH_ADDR = process.env.ETH_ADDR;
-const CONTRACT_ABI = process.env.CONTRACT_ABI;
-const _web3 = window.web3;
-const Web3 = window.Web3;
-const ethereumProvider = window.ethereumProvider;
+if (typeof window.web3 !== 'undefined') {
+  console.log('with web3');
+  var _web3Provider = window.web3.currentProvider;
+  var _web3 = new Web3Driver(_web3Provider);
+} else {
+  var _web3Provider = new Web3Driver
+    .providers.HttpProvider('http://localhost:8545');
+  var _web3 = new Web3(_web3Provider);
+}
 
-const provider = (typeof _web3 !== 'undefined' &&
-  (_web3.currentProvider || _web3.givenProvider)) ||
-  (typeof Web3 !== 'undefined' && Web3.givenProvider) ||
-  (typeof ethereumProvider !== 'undefined' && ethereumProvider) ||
-  'http://localhost:8545';
+export const web3Provider = _web3Provider;
 
-export const accounts = _web3.eth.accounts;
-
-export const web3 = new Web3Driver(provider);
+export const web3 = _web3;
 
 export const eth = web3.eth;
 
-export const ethcrow = new web3.eth.Contract(ETH_ABI, ETH_ADDR);
+const EthcrowContract = TruffleContract(EthcrowArtifact);
+const EscrowContract = TruffleContract(EscrowArtifact);
 
-export function createContract(address) {
-  return new web3.eth.Contract(CONTRACT_ABI, address);
-}
+EthcrowContract.setProvider(_web3Provider);
+EscrowContract.setProvider(_web3Provider);
+
+export const Ethcrow = EthcrowContract.deployed();
+export const Escrow = EscrowContract;

@@ -44,14 +44,24 @@ export function importAesKey(jwkKey) {
   ]);
 }
 
-export function importRsaKey(jwkKey) {
+export function importRsaKeyPublic(jwkKey) {
   const options = {
       name: RSA,
       hash: {
         name: "SHA-512"
       },
   };
-  return subtle.importKey("jwk", jwkKey, options, true, ["decrypt"]);
+  return subtle.importKey("jwk", jwkKey, options, true, ["wrapKey", "encrypt"]);
+}
+
+export function importRsaKeyPrivate(jwkKey) {
+  const options = {
+      name: RSA,
+      hash: {
+        name: "SHA-512"
+      },
+  };
+  return subtle.importKey("jwk", jwkKey, options, true, ["unwrapKey", "decrypt"]);
 }
 
 export function exportKey(key) {

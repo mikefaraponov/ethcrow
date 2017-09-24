@@ -83,6 +83,9 @@
   }
 }
 
+.is-grey {
+  opacity: 0.5;
+}
 
 .box:hover {
   box-shadow: -1px 0px 10px 5px hsla(0,0%,4%,.1), 0 0 0 1px hsla(0,0%,4%,.1);
@@ -90,4 +93,11 @@
 
 a[disabled] {
     pointer-events: none;
+}
+
+.contract-elips {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 65%;
 }

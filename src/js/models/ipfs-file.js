@@ -1,7 +1,9 @@
+import {observable} from 'mobx';
+
 export default class IpfsFile {
   @observable downloaded = false;
   @observable loading = false;
-  constructor(returnValues) {
-    Object.assign(this, returnValues);
+  constructor(args) {
+    Object.assign(this, args);
   }
 }

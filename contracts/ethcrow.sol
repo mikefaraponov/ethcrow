@@ -1,4 +1,4 @@
-pragma solidity ^0.4.4;
+pragma solidity ^0.4.15;
 
 import "./Escrow.sol";
 
@@ -6,8 +6,8 @@ contract Ethcrow {
     address public creator;
 
     event ContractCreated(
-        address indexed producer,
         address indexed consumer,
+        address indexed producer,
         address escrow);
 
     function Ethcrow() {
@@ -15,14 +15,16 @@ contract Ethcrow {
     }
 
     modifier notTheSameAsSender(address _producer) {
-        require(_producer != msg.sender);
+        require(msg.sender != _producer);
         _;
     }
 
     function signEscrow(address producer, bytes32 pkey)
         public payable notTheSameAsSender(producer) {
-        Escrow escrow = (new Escrow)
-            .value(msg.value)(producer, msg.sender, pkey);
-        ContractCreated(producer, msg.sender, escrow);
+        address escrow = (new Escrow)
+            .value(msg.value)(msg.sender, producer, pkey);
+        ContractCreated(msg.sender, producer, escrow);
     }
+
+    function() payable {}
 }

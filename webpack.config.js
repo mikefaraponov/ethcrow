@@ -31,10 +31,10 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.sol$/,
+        test: /\.json$/,
         exclude: /node_modules/,
         use: {
-          loader: 'truffle-solidity',
+          loader: 'json-loader',
         }
       },
       {
@@ -109,7 +109,6 @@ module.exports = {
     new webpack.ProvidePlugin({
       React: 'react',
       Promise: 'bluebird',
-      'window.Promise': 'bluebird',
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/resources/html/index.ejs'),
@@ -130,6 +129,6 @@ module.exports = {
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.scss'],
-    modules: ['src/js', 'src/resources', 'node_modules'],
+    modules: ['src/js', 'src/resources', 'node_modules', __dirname],
   },
 };

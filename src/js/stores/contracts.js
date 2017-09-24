@@ -1,67 +1,144 @@
-import {observable, computed, action} from 'mobx';
+import {observable, computed, action, toJS} from 'mobx';
+import {web3, Escrow, Ethcrow, eth} from 'utils/web3';
+import ipfs from 'utils/ipfs';
+import Contract from 'models/contract';
 
 export default class ContractsStore {
   @observable contracts = [];
+  @observable accounts = [];
+  @observable loadingContract = false;
+  @observable selected = null;
+  @observable loadingContracts = false;
   @observable loading = false;
-  toValues = (event) => event.returnValues;
-  constructor(accounts, ethcrow) {
-    this.accounts = accounts;
-    this.ethcrow = ethcrow;
+  constructor(keys) {
+    this.keys = keys;
   }
-  @computed get contract() {
-    return contracts;
+  @action.bound
+  select(event) {
+    this.selected = event.target.value;
+  }
+  toValues(event) {
+    return event.args;
   }
   @action
-  fetch(address) {
+  initialize() {
     this.loading = true;
-    this.ethcrow.getPastEvents('ContractAdded', {
-        filter:  Object.assign({
-          producer: this.accounts,
-          consumer: this.accounts,
-        }, address ? {address} : void 0);
-      })
+    return Promise
+      .all([eth.getAccounts(), Ethcrow])
+      .then(this.setAccountsAndContract);
+  }
+  @action.bound
+  setAccountsAndContract([accounts, ethcrow]) {
+    this.selected = accounts[0];
+    this.accounts = accounts;
+    this.ethcrow = ethcrow;
+    this.loading = false;
+  }
+  @action
+  fetch() {
+    this.loadingContracts = true;
+
+    return new Promise((resolve, reject) => {
+      this.ethcrow.ContractCreated({}, {fromBlock: 0, toBlock: 'latest'})
+        .get(function(err, result) {
+          if (err) return reject(err);
+          else return resolve(result);
+        });
+    }).map(o => o.args)
       .map(this.fetchFromBlockchain)
       .map(Contract.of)
       .then(this.fetched);
   }
   @action
-  fetchFromBlockchain = ({returnValues}) => {
-        const {producer, consumer, address} = returnValues;
-        const smCont = createContract(address);
-        const price = eth.getBalance(address);
-        const status = smCont.status.call();
-        const pkey = smCont.pkey.call();
-        const files = smCont.getPastEvents('FileAdded').map(this.toValues);
-        const toMe = this.accounts.includes(producer);
-        return Promise.hash({
+  fetchFromBlockchain = (args) => {
+    const {producer, consumer, escrow: address} = args;
+    console.log();
+    console.info();
+    console.log();
+    return Promise.all([
+        Escrow.at(address),
+        eth.getBalance(address),
+        toJS(this.accounts)
+          .map(x => x.toUpperCase())
+          .includes(producer.toUpperCase()),
+      ])
+      .then(([escrow, price, toMe]) => {
+        console.log('fuck', price, toMe);
+        const files = new Promise((resolve, reject) => {
+          escrow.FileAdded({}, {fromBlock: 0})
+            .get(function(err, result) {
+              if (err) return reject(err);
+              else return resolve(result.map(({args}) => ({
+                ...args,
+                path: web3.utils.hexToUtf8(args.path),
+              })));
+            });
+        });
+        return Promise.props({
           price,
-          status,
-          pkey,
-          files,
-          smCont,
+          escrow,
           producer,
           consumer,
           toMe,
+          address,
+          state: escrow.state.call().then(x => x.toNumber()),
+          pkey: escrow.pkey.call(),
+          files,
         });
-      }
+      })
   }
   @action
   fetched = (contracts) => {
     this.contracts = contracts;
-    this.loading = false;
+    this.loadingContracts = false;
   }
   @action
   onContractAdded() {
-    return this.ethcrow.events.ContractAdded().on('data', this.listen);
+    return this.ethcrow.ContractCreated({}, {fromBlock: 'pending'}).watch((err, {args}) => {
+      console.log('once', toJS(this.contracts));
+      err && console.error(err);
+      if (this.contracts.map((x) => x.address).includes(args.escrow)) {
+        console.log('same');
+      } else {
+        this.fetchFromBlockchain(args)
+          .then(Contract.of)
+          .then(this.addContract);
+      }
+    });
   }
-  @action
-  listen = (event) => {
-    this.fetchFromBlockchain(event)
-      .then(Contract.of)
-      .then(this.setContracts);
-  };
-  @action
-  setContracts = (contract) => {
+  @action.bound
+  addContract(contract) {
+    console.log(contract);
     this.contracts.push(contract);
   };
+  @action.bound
+  setProducer(producer) {
+    this.producer = producer.target.value;
+  }
+  @action.bound
+  createContract(after) {
+    this.loadingContract = true;
+    this.keys.publicKeyExport()
+      .then(JSON.stringify.bind(JSON))
+      .then((pkey) => {
+        return ipfs.files.add({
+          path: 'pkey.json',
+          content: Buffer.from(pkey)
+        });
+      })
+      .then(([file]) => {
+        console.log(this.selected);
+        return this.ethcrow.signEscrow
+          .sendTransaction(this.producer, file.hash, {
+            from: this.selected,
+            value: web3.utils.toWei(this.amountOfEther),
+          });
+      })
+      .then(after);
+
+  }
+  @action.bound
+  setAmountOfEther(e) {
+    this.amountOfEther = e.target.value;
+  }
 }

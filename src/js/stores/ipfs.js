@@ -1,12 +1,10 @@
 import {observable, action} from 'mobx';
+import ipfs from 'utils/ipfs';
 
 export default class IPFS {
-  @observable isReady = false;
-  constructor(ipfs) {
-    this.ipfs = ipfs;
-  }
+  @observable loading = true;
   @action
   initialize() {
-    this.ipfs.on('ready', () => this.isReady = true)
+    ipfs.on('ready', () => this.loading = false);
   }
 }

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.4;
+pragma solidity ^0.4.15;
 
 contract Escrow {
     enum State {
@@ -11,9 +11,9 @@ contract Escrow {
     State public state;
     bytes32 public pkey;
 
-    event FileAdded(bytes32 _path, bytes32 _wkey, bytes32 _iv);
+    event FileAdded(bytes path, bytes32 wkey, bytes32 iv);
     event PublicKeyChanged(bytes32 _pkey);
-    event StateChanged(State _state);
+    event StateChanged(State state);
 
     modifier inState(State _state) {
         require(state == _state);
@@ -36,6 +36,7 @@ contract Escrow {
         consumer = _consumer;
         producer = _producer;
         pkey = _pkey;
+        state = State.Created;
     }
 
     function setPublicKey(bytes32 _pkey) public onlyConsumer {
@@ -43,19 +44,21 @@ contract Escrow {
         PublicKeyChanged(_pkey);
     }
 
-    function accept() public onlyConsumer {
-        // producer.transfer(this.balance);
+    function accept() public onlyConsumer inState(State.Created) {
         state = State.Accepted;
-        StateChanged(State.Accepted);
+        StateChanged(state);
     }
 
-    function reject() public onlyProducer {
-        consumer.send(this.balance);
+    function reject() public onlyProducer inState(State.Created) {
         state = State.Rejected;
-        StateChanged(State.Rejected);
+        StateChanged(state);
     }
 
-    function addFile(bytes32 path, bytes32 wkey, bytes32 iv) public onlyProducer {
+    function addFile(bytes path, bytes32 wkey, bytes32 iv) public
+        onlyProducer inState(State.Created)
+    {
         FileAdded(path, wkey, iv);
     }
+
+    function() payable {}
 }

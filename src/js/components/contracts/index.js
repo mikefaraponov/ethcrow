@@ -8,7 +8,7 @@ export default class Contracts extends React.Component {
     return <Switch>
       <Route exact path="/contracts" component={ContractsManager}/>
       <Route exact path="/contracts/create" component={CreateContract}/>
-      <Route path="/contracts/:id" component={ContractView}/>
+      <Route path="/contracts/:address" component={ContractView}/>
     </Switch>;
   }
 }

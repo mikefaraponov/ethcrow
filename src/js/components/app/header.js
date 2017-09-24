@@ -1,31 +1,40 @@
 import {NavLink} from 'react-router-dom';
 import box from 'images/box.svg';
-// import {observer} from 'mobx-react';
+import {observer, inject} from 'mobx-react';
+import classnames from 'classnames';
+import {withRouter} from 'react-router-dom';
 
-// @observer(['counter'])
+@withRouter
+@inject('counter', 'menu')
+@observer
 export default class Header extends React.Component {
   componentWillMount() {
-    // this.contractAdded = this.props.counter.onContractAdded();
+    this.contractAdded = this.props.counter.onContractAdded();
   }
   componentWillUnmount() {
-    // this.contractAdded.removeAllListeners();
+    this.contractAdded.stopWatching();
   }
   render() {
-    return <nav className="nav">
-      <div className="container">
-        <div className="nav-left">
-          <NavItem to="/">
+    const burger = classnames('navbar-burger burger', {
+      'is-active': this.props.menu.isOpened,
+    });
+    const menu = classnames('navbar-menu navbar-end', {
+      'is-active': this.props.menu.isOpened,
+    });
+    return <nav className="navbar" role="navigation">
+        <div className="navbar-brand">
+          <NavItem to="/" nothing={true}>
             <img src={box} className="image is-32x32"/>
             &nbsp;
             <strong className="logo">Ethcrow</strong>
           </NavItem>
+          <span className={burger} onClick={this.props.menu.toggleMenu}>
+            <span/>
+            <span/>
+            <span/>
+          </span>
         </div>
-        <span className="nav-toggle">
-          <span/>
-          <span/>
-          <span/>
-        </span>
-        <div className="nav-right nav-menu">
+        <div className={menu}>
           <NavItem to="/demo">
             Demo
           </NavItem>
@@ -39,7 +48,6 @@ export default class Header extends React.Component {
             Keys
           </NavItem>
         </div>
-      </div>
     </nav>;
   }
 }
@@ -54,11 +62,11 @@ function Counter({counter}) {
   }
 }
 
-function NavItem({to, children, ...props}) {
+function NavItem({to, nothing, children, ...props}) {
   return <NavLink {...props}
     to={to}
-    className="nav-item"
-    activeClassName="is-active">
+    className="navbar-item"
+    activeClassName={nothing ? null : 'is-active'}>
     {children}
   </NavLink>;
 }

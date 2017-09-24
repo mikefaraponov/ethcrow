@@ -1,14 +1,12 @@
 import {observable, computed, action} from 'mobx';
 import {validate} from 'email-validator';
+import axios from 'utils/axios';
 
 export default class Newsletter {
   @observable pending = false;
   @observable result = false;
   @observable error = false;
   email = '';
-  constructor(axios) {
-    this.axios = axios;
-  }
   @action
   onEmailInput = (e) => {
     this.error = false;

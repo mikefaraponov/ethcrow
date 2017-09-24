@@ -1,17 +1,23 @@
 import Network from 'stores/network';
 import Newsletter from 'stores/newsletter';
-// import Contracts from 'stores/contracts';
-// import Counter from 'stores/counter';
+import Contracts from 'stores/contracts';
+import Contract from 'stores/contract';
+import Counter from 'stores/counter';
 import Ipfs from 'stores/ipfs';
-import ipfs from 'utils/ipfs';
-// import Menu from 'stores/menu';
-import axios from 'utils/axios';
-window.ipfs = ipfs;
+import Keys from 'stores/keys';
+import Menu from 'stores/menu';
+
+const keys = new Keys();
+const contracts = new Contracts(keys);
+const contract = new Contract(keys, contracts);
+
 export default {
-  // contracts: new Contracts(node, web3, ethcrow),
+  keys,
+  contracts,
+  contract,
   network: new Network(),
-  newsletter: new Newsletter(axios),
-  ipfs: new Ipfs(ipfs),
-  // counter: new Counter(),
-  // menu: new Menu(),
+  newsletter: new Newsletter(),
+  ipfs: new Ipfs(),
+  counter: new Counter(contracts),
+  menu: new Menu(),
 };
