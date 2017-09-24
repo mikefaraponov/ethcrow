@@ -19,7 +19,7 @@ contract Ethcrow {
         _;
     }
 
-    function signEscrow(address producer, bytes32 pkey)
+    function signEscrow(address producer, bytes pkey)
         public payable notTheSameAsSender(producer) {
         address escrow = (new Escrow)
             .value(msg.value)(msg.sender, producer, pkey);

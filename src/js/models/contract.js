@@ -2,6 +2,7 @@ import {observable, action} from 'mobx';
 import IpfsFile from 'models/ipfs-file';
 import ipfs from 'utils/ipfs';
 import {web3} from 'utils/web3';
+import * as crypto from 'utils/crypto';
 
 export default class Contract {
   @observable files = [];
@@ -42,15 +43,31 @@ export default class Contract {
   @action.bound
   addFile(e) {
     const fr = new FileReader();
+    const publicKey = JSON.parse(web3.utils.hexToUtf8(this.pkey));
     fr.onloadend = () => {
-      ipfs.files.add({
-        path: 'file.zip',
-        content: Buffer.from(fr.result)
-      }).then(([file]) => {
-        return this.escrow.addFile(file.hash, 'fuck', 'fuck', {
-          from: this.producer,
-        });
+      return Promise.all([
+        crypto.generateAesKey(),
+        crypto.importRsaKeyPublic(publicKey),
+      ])
+      .then(([key, pkey]) => {
+        return Promise.all([crypto.wrapKey(key, pkey), key]);
       })
+      .then(([wrappedKey, key]) => {
+        const iv = crypto.getRandomValues(new Uint8Array(16));
+        return crypto.encrypt(key, iv, fr.result)
+          .then((encrypted) => {
+            ipfs.files.add({
+              path: 'file.zip',
+              content: Buffer.from(encrypted)
+              }).then(([{hash}]) => {
+                return this.escrow.addFile({hash},
+                  JSON.stringify(wrappedKey),
+                  JSON.stringify(iv), {
+                  from: this.producer,
+                });
+            })
+          });
+      });
     }
     fr.readAsArrayBuffer(e.target.files[0]);
   }

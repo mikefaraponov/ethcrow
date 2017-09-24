@@ -9,10 +9,10 @@ contract Escrow {
     address public consumer;
     address public producer;
     State public state;
-    bytes32 public pkey;
+    bytes public pkey;
 
-    event FileAdded(bytes path, bytes32 wkey, bytes32 iv);
-    event PublicKeyChanged(bytes32 _pkey);
+    event FileAdded(bytes path, bytes wkey, bytes iv);
+    event PublicKeyChanged(bytes pkey);
     event StateChanged(State state);
 
     modifier inState(State _state) {
@@ -30,7 +30,7 @@ contract Escrow {
         _;
     }
 
-    function Escrow(address _consumer, address _producer, bytes32 _pkey)
+    function Escrow(address _consumer, address _producer, bytes _pkey)
         payable
     {
         consumer = _consumer;
@@ -39,7 +39,7 @@ contract Escrow {
         state = State.Created;
     }
 
-    function setPublicKey(bytes32 _pkey) public onlyConsumer {
+    function setPublicKey(bytes _pkey) public onlyConsumer {
         pkey = _pkey;
         PublicKeyChanged(_pkey);
     }
@@ -54,7 +54,7 @@ contract Escrow {
         StateChanged(state);
     }
 
-    function addFile(bytes path, bytes32 wkey, bytes32 iv) public
+    function addFile(bytes path, bytes wkey, bytes iv) public
         onlyProducer inState(State.Created)
     {
         FileAdded(path, wkey, iv);

@@ -2,6 +2,7 @@ import {observable, computed, action, toJS} from 'mobx';
 import {web3, Escrow, Ethcrow, eth} from 'utils/web3';
 import ipfs from 'utils/ipfs';
 import Contract from 'models/contract';
+import * as crypto from 'utils/crypto';
 
 export default class ContractsStore {
   @observable contracts = [];
@@ -114,20 +115,14 @@ export default class ContractsStore {
     this.keys.publicKeyExport()
       .then(JSON.stringify.bind(JSON))
       .then((pkey) => {
-        return ipfs.files.add({
-          path: 'pkey.json',
-          content: Buffer.from(pkey),
-        });
-      })
-      .then(([{hash}]) => {
+        console.log('Public Key', pkey);
         return this.ethcrow.signEscrow
-          .sendTransaction(this.producer, hash, {
+          .sendTransaction(this.producer, pkey, {
             from: this.selected,
             value: web3.utils.toWei(this.amountOfEther),
           });
       })
       .then(after);
-
   }
   @action.bound
   setAmountOfEther(e) {

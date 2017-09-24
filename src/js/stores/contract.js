@@ -3,6 +3,7 @@ import {web3, Escrow, Ethcrow, eth} from 'utils/web3';
 import ipfs from 'utils/ipfs';
 import Contract from 'models/contract';
 import {toJS} from 'mobx';
+import * as crypto from 'utils/crypto';
 
 export default class ContractStore {
   @observable contract = null;
@@ -14,7 +15,6 @@ export default class ContractStore {
   @action
   fetch(address) {
     this.loadingContract = true;
-
     return Promise.all([
         Escrow.at(address),
         eth.getBalance(address),
@@ -31,12 +31,10 @@ export default class ContractStore {
               })));
             });
         });
-        console.log('fetch(');
         return Promise.props({
           price,
           escrow,
           toMe: escrow.producer.call().then((producer) => {
-            console.log(toJS(this.contracts.accounts), producer);
             return this.contracts.accounts.map(x => x.toUpperCase())
               .includes(producer.toUpperCase())
           }),
@@ -50,6 +48,7 @@ export default class ContractStore {
       })
       .then(Contract.of)
       .then((contract) => {
+        console.log(contract.pkey);
         this.contract = contract;
         this.loadingContract = false;
       });

@@ -51,7 +51,9 @@ export function importRsaKeyPublic(jwkKey) {
         name: "SHA-512"
       },
   };
-  return subtle.importKey("jwk", jwkKey, options, true, ["wrapKey", "encrypt"]);
+  return subtle.importKey("jwk", jwkKey, options, true, [
+    "wrapKey", "encrypt",
+  ]);
 }
 
 export function importRsaKeyPrivate(jwkKey) {
@@ -97,12 +99,12 @@ export function unwrapKey(wrapped, privateKey) {
   ]);
 }
 
-export function encryptAes(key, iv) {
+export function encryptAes(key, iv, data) {
   const options = {
     name: AES,
     iv,
   };
-  return subtle.encrypt(options, key, result);
+  return subtle.encrypt(options, key, data);
 }
 
 export function decryptAes(iv, key, data) {
