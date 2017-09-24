@@ -10,6 +10,8 @@
     "serve": "firebase serve &",
     "testrpc": "testrpc &",
     "compile": "truffle compile",
+    "eth:deploy": "truffle deploy",
+    "testrpc": "testrpc --account=\"0x0551b1fd0d6d1cd004633c7f6a5f6ffafd94d6472a6d5652e31b72a3eaca97ce,1000000000000000000002000\" --account=\"0x6d16e5957caaab735cbaefc84db1fad0c939cb271d674d1a0102fd4ac4531a5b,5000000000000000000000\"",
     "dev": "npm run serve && webpack",
     "build": "npm run clean && NODE_ENV=production webpack",
     "predeploy": "npm run build",

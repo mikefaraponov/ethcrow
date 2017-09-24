@@ -59,10 +59,20 @@ export default class CreateContract extends React.Component {
                 </p>
               </div>
             </div>
-            <br/>
-            <button onClick={this.onCreateContract} className="button is-success">
-              Create
-            </button>
+            <hr/>
+            <div className="field is-grouped">
+              <div className="control">
+                <button onClick={this.onCreateContract} className="button is-success">
+                  Create
+                </button>
+              </div>
+              <div className="control">
+                <button className="button is-light"
+                  onClick={() => this.props.history.goBack()}>
+                  Back
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

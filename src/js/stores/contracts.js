@@ -37,7 +37,6 @@ export default class ContractsStore {
   @action
   fetch() {
     this.loadingContracts = true;
-
     return new Promise((resolve, reject) => {
       this.ethcrow.ContractCreated({}, {fromBlock: 0, toBlock: 'latest'})
         .get(function(err, result) {
@@ -52,9 +51,6 @@ export default class ContractsStore {
   @action
   fetchFromBlockchain = (args) => {
     const {producer, consumer, escrow: address} = args;
-    console.log();
-    console.info();
-    console.log();
     return Promise.all([
         Escrow.at(address),
         eth.getBalance(address),
@@ -81,9 +77,9 @@ export default class ContractsStore {
           consumer,
           toMe,
           address,
+          files,
           state: escrow.state.call().then(x => x.toNumber()),
           pkey: escrow.pkey.call(),
-          files,
         });
       })
   }
@@ -94,21 +90,18 @@ export default class ContractsStore {
   }
   @action
   onContractAdded() {
-    return this.ethcrow.ContractCreated({}, {fromBlock: 'pending'}).watch((err, {args}) => {
-      console.log('once', toJS(this.contracts));
-      err && console.error(err);
-      if (this.contracts.map((x) => x.address).includes(args.escrow)) {
-        console.log('same');
-      } else {
-        this.fetchFromBlockchain(args)
-          .then(Contract.of)
-          .then(this.addContract);
-      }
-    });
+    return this.ethcrow.ContractCreated({}, {fromBlock: 'pending'})
+      .watch((err, {args}) => {
+        err && console.error(err);
+        if (!this.contracts.map((x) => x.address).includes(args.escrow)) {
+          this.fetchFromBlockchain(args)
+            .then(Contract.of)
+            .then(this.addContract);
+        }
+      });
   }
   @action.bound
   addContract(contract) {
-    console.log(contract);
     this.contracts.push(contract);
   };
   @action.bound
@@ -123,13 +116,12 @@ export default class ContractsStore {
       .then((pkey) => {
         return ipfs.files.add({
           path: 'pkey.json',
-          content: Buffer.from(pkey)
+          content: Buffer.from(pkey),
         });
       })
-      .then(([file]) => {
-        console.log(this.selected);
+      .then(([{hash}]) => {
         return this.ethcrow.signEscrow
-          .sendTransaction(this.producer, file.hash, {
+          .sendTransaction(this.producer, hash, {
             from: this.selected,
             value: web3.utils.toWei(this.amountOfEther),
           });

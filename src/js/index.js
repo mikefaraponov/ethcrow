@@ -5,7 +5,6 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import AppShell from 'components/app/app-shell';
 import NoMatch from 'components/app/no-match';
 import Initializator from 'components/app/initializator';
-import Demo from 'components/demo';
 import stores from 'stores';
 
 render(<Provider {...stores}>

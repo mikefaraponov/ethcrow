@@ -35,9 +35,6 @@ export default class Header extends React.Component {
           </span>
         </div>
         <div className={menu}>
-          <NavItem to="/demo">
-            Demo
-          </NavItem>
           <NavItem to="/about">
             About
           </NavItem>

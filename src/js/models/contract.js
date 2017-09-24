@@ -47,7 +47,6 @@ export default class Contract {
         path: 'file.zip',
         content: Buffer.from(fr.result)
       }).then(([file]) => {
-        console.log(file, file, file);
         return this.escrow.addFile(file.hash, 'fuck', 'fuck', {
           from: this.producer,
         });
