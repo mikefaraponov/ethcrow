@@ -1,2 +1,2 @@
 # Ethcrow
-Ethcrow
+Escrow ethereum service
